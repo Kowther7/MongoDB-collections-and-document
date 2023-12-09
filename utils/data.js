@@ -1,4 +1,4 @@
-const firstNames = [
+const usernames = [
     "John",
     "Jane",
     "Michael",
@@ -78,12 +78,12 @@ const firstNames = [
   
   // Function to generate a random username
   const getRandomUsername = () =>
-    `${getRandomArrItem(firstNames)}_${Math.floor(Math.random() * 100)}`;
+    `${getRandomArrItem(usernames)}_${Math.floor(Math.random() * 100)}`;
   
   // Function to generate a random email
   const getRandomEmail = () =>
     `${
-      getRandomArrItem(firstNames).toLowerCase() +
+      getRandomArrItem(usernames).toLowerCase() +
       Math.floor(Math.random() * 9) +
       1
     }@gmail.com`;
