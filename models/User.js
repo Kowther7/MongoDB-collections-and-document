@@ -1,8 +1,7 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-
-// Schema to create Student model
-const usersSchema = new Schema(
+// Schema to create User model
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -15,32 +14,40 @@ const usersSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      match: [/\w+@\w+\.\w{2,20}/, "Must be a valid email!"],
-      max_length: 50,
+      validate: {
+        validator: function (v) {
+          return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
+        },
+      },
+      message: "Please enter a valid email address",
     },
-  
     thoughts: [
-        {
-            type: Schema.Types.ObjectId , 
-            ref: "Thought"
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Thought",
+      },
     ],
     friends: [
-        {
-            type: Schema.Types.ObjectId , 
-            ref: "User"
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
     ],
   },
   {
     toJSON: {
-      getters: true,
+      virtuals: true,
     },
+    id: false,
   }
 );
-usersSchema.virtual("friendCount").get(function(){
-    return this.friends.length
-})
-const User = model('User', usersSchema);
+
+// Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
+userSchema.virtual("friendCount").get(function () {
+  return `${this.friends.length} friends`;
+});
+
+// Initialize our User model
+const User = model("user", userSchema);
 
 module.exports = User;
